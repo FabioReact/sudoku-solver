@@ -36,7 +36,7 @@ const sudokuPlain = chunk(sudokuSplit, 9)
 
 export const sudokuArray = customSudoku(sudokuPlain)
 
-const findRange = number => {
+export const findRange = number => {
 	if (number < 3) return [0, 2]
 	else if (number < 6) return [3, 5]
 	else return [6, 8]
@@ -65,7 +65,34 @@ const findLine = (sudoku, y) => {
 	}, [])
 }
 
+const findColumn = (sudoku, x) => {
+	let i = 0
+	const tab = []
+	while (i < 9) {
+		const value = sudoku[i][x].value
+		if (value !== "x")
+			tab.push(Number.parseInt(value))
+		i++
+	}
+	return tab
+}
 
 const sudokuSolver = (sudoku) => {
 
 }
+
+export const findNumbers = (sudoku, x, y) => {
+	const possibleNumber = [1, 2, 3, 4, 5, 6, 7, 8, 9]
+	const column = findColumn(sudoku, x)
+	const square = findSquare(sudoku, x, y)
+	const line = findLine(sudoku, y)
+	return possibleNumber.filter(number => {
+		const isInColumn = column.includes(number)
+		const isInLine = line.includes(number)
+		const isInSquare = square.includes(number)
+		return !isInColumn && !isInLine && !isInSquare
+	})
+}
+
+
+export const deepCloneArray = (items) => items.map(item => Array.isArray(item) ? deepCloneArray(item) : item);
